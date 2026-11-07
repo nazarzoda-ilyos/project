@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Клиенту Kaspi</title>
+  <title>Переводы Kaspi</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -25,34 +25,41 @@
     input[type=number] {
       -moz-appearance: textfield;
     }
+    /* Плавное исчезновение полосы прокрутки */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
 <body class="bg-[#F2F2F7] text-black min-h-screen flex flex-col font-sans antialiased select-none">
 
-  <!-- Главный контейнер с отступами Safe Area -->
-  <div class="w-full max-w-md mx-auto flex-1 flex flex-col pt-[env(safe-area-inset-top)] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+  <!-- ================= 1. ЭКРАН ВВОДА ПЕРЕВОДА ================= -->
+  <div id="screen-form" class="w-full max-w-md mx-auto flex-1 flex flex-col pt-[env(safe-area-inset-top)] pb-[calc(1rem+env(safe-area-inset-bottom))]">
     
-    <!-- 1. Шапка (Header) -->
+    <!-- Шапка -->
     <header class="px-4 py-3 flex items-center justify-between relative bg-[#F2F2F7]">
       <button class="text-black font-normal text-2xl active:opacity-40">
         &#8249;
       </button>
       <h1 class="text-[17px] font-semibold text-center text-black">Клиенту Kaspi</h1>
-      <div class="w-6"></div> <!-- Пустой блок для центровки заголовка -->
+      <div class="w-6"></div>
     </header>
 
     <main class="flex-1 px-4 pt-2 pb-24 space-y-3 overflow-y-auto">
 
-      <!-- 2. Блок выбора карты Kaspi Gold -->
+      <!-- Карта Kaspi Gold -->
       <div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm border border-gray-100">
         <div class="flex items-center gap-3">
-          <!-- Иконка Kaspi Gold -->
           <div class="w-10 h-10 rounded-lg bg-[#C49A45] flex items-center justify-center font-bold text-white text-xs shadow-inner">
             KG
           </div>
           <span class="text-[16px] font-medium text-gray-900">Kaspi Gold</span>
         </div>
-        <span class="text-[16px] font-semibold text-gray-900">24167,12 ₸</span>
+        <span class="text-[16px] font-semibold text-gray-900">1,18 ₸</span>
       </div>
 
       <!-- Стрелка-разделитель -->
@@ -62,9 +69,9 @@
         </div>
       </div>
 
-      <!-- 3. Табы переключения (Телефон / Карта / Kaspi QR) -->
+      <!-- Переключатели -->
       <div class="bg-[#E5E5EA] p-1 rounded-xl flex text-[13px] font-medium text-gray-700">
-        <button id="tab-phone" onclick="selectTab('phone')" class="flex-1 py-1.5 rounded-lg bg-white text-black shadow-sm text-center">
+        <button id="tab-phone" onclick="selectTab('phone')" class="flex-1 py-1.5 rounded-lg bg-white text-black shadow-sm text-center font-medium">
           Телефон
         </button>
         <button id="tab-card" onclick="selectTab('card')" class="flex-1 py-1.5 rounded-lg text-center text-gray-600">
@@ -76,7 +83,7 @@
         </button>
       </div>
 
-      <!-- 4. Поле ввода телефона -->
+      <!-- Телефон -->
       <div class="relative bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
         <input 
           type="tel" 
@@ -84,7 +91,6 @@
           placeholder="Телефон получателя" 
           class="w-full text-[16px] text-gray-900 placeholder-gray-400 bg-transparent outline-none font-normal"
         />
-        <!-- Иконка контактов (красный кружок с профилем) -->
         <button class="w-7 h-7 rounded-full bg-[#E50000] text-white flex items-center justify-center flex-shrink-0 ml-2 active:opacity-70">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
             <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
@@ -92,7 +98,7 @@
         </button>
       </div>
 
-      <!-- 5. Поле ввода суммы -->
+      <!-- Сумма -->
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center">
         <input 
           type="number" 
@@ -104,7 +110,7 @@
         <span class="text-[17px] font-normal text-gray-900 ml-1">₸</span>
       </div>
 
-      <!-- 6. Поле сообщения получателю -->
+      <!-- Сообщение -->
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col justify-between min-h-[100px]">
         <textarea 
           id="messageInput"
@@ -116,7 +122,7 @@
         <div class="text-right text-[12px] text-gray-400" id="charCounter">0/50</div>
       </div>
 
-      <!-- 7. Быстрые теги (Рақмет!, За обед, Возвращаю :) ) -->
+      <!-- Быстрые сообщения -->
       <div class="flex gap-2 overflow-x-auto pt-1 no-scrollbar">
         <button onclick="setTag('Рақмет!')" class="px-3.5 py-1.5 bg-[#E5E5EA]/70 active:bg-[#E5E5EA] rounded-lg text-[13px] text-[#007AFF] font-medium whitespace-nowrap">
           Рақмет!
@@ -131,11 +137,11 @@
 
     </main>
 
-    <!-- 8. Нижняя синяя кнопка перевода -->
+    <!-- Кнопка отправки -->
     <footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-[#F2F2F7] z-50 pb-[calc(1rem+env(safe-area-inset-bottom))]">
       <button 
         id="submitBtn"
-        onclick="handleTransfer()"
+        onclick="showSuccessScreen()"
         class="w-full py-3.5 bg-[#0055A5] active:bg-[#004485] text-white font-medium text-[16px] rounded-xl shadow-md transition-all text-center"
       >
         Перевести 0 ₸
@@ -144,8 +150,117 @@
 
   </div>
 
+
+  <!-- ================= 2. ЭКРАН УСПЕШНОГО ПЕРЕВОДА ================= -->
+  <div id="screen-success" class="hidden w-full max-w-md mx-auto flex-1 flex-col pt-[env(safe-area-inset-top)] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+    
+    <!-- Шапка -->
+    <header class="px-4 py-3 flex items-center justify-center relative bg-[#F2F2F7]">
+      <h1 class="text-[17px] font-semibold text-center text-black">Переводы</h1>
+    </header>
+
+    <main class="flex-1 px-4 pt-4 pb-24 space-y-4 overflow-y-auto">
+
+      <!-- Зеленая галочка и сумма -->
+      <div class="flex flex-col items-center justify-center py-2">
+        <div class="w-14 h-14 rounded-full bg-[#34C759] flex items-center justify-center text-white text-2xl mb-3 shadow-sm">
+          ✓
+        </div>
+        <h2 class="text-[18px] font-semibold text-gray-900 mb-1">Ваш перевод совершен</h2>
+        <div class="text-[32px] font-bold text-gray-900" id="successAmountText">100 ₸</div>
+      </div>
+
+      <!-- Блок с квитанцией и добавлением в частые -->
+      <div class="bg-white rounded-2xl divide-y divide-gray-100 shadow-sm border border-gray-100">
+        <!-- Квитанция -->
+        <button class="w-full p-4 flex items-center justify-between text-left active:bg-gray-50 rounded-t-2xl">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-red-50 text-[#E50000] flex items-center justify-center text-lg">
+              📄
+            </div>
+            <div>
+              <p class="text-[15px] font-medium text-gray-900">Показать квитанцию</p>
+              <p class="text-[12px] text-gray-400">Квитанция сохранена в Истории</p>
+            </div>
+          </div>
+          <span class="text-gray-400 text-lg">&#8250;</span>
+        </button>
+
+        <!-- Сохранить в частые -->
+        <div class="p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 text-amber-400 flex items-center justify-center text-xl">
+              ☆
+            </div>
+            <div>
+              <p class="text-[15px] font-medium text-gray-900">Numonjon Q.</p>
+              <p class="text-[12px] text-gray-400">Сохранить в Частые</p>
+            </div>
+          </div>
+          <!-- Toggle переключатель -->
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#34C759]"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Блок с товарами: Вас могут заинтересовать -->
+      <div class="pt-2">
+        <h3 class="text-[15px] font-semibold text-gray-900 mb-3">Вас могут заинтересовать</h3>
+
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Товар 1 -->
+          <div class="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm flex flex-col justify-between">
+            <div class="w-full h-32 bg-gray-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden">
+              <img src="https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_SL1500_.jpg" alt="iPhone 18 Pro" class="h-full object-contain" />
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="bg-[#34C759] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">47 492 ₸ 5%</span>
+                <span class="bg-amber-400 text-black text-[10px] font-bold px-1.5 py-0.5 rounded">0 • 0 • 24</span>
+              </div>
+              <p class="text-[16px] font-bold text-gray-900">949 840 ₸</p>
+              <p class="text-[11px] text-emerald-600 font-medium">902 348 ₸ с учетом Бонусов</p>
+              <p class="text-[12px] text-gray-500 line-clamp-1">Смартфон Apple iPhone 18 Pro</p>
+            </div>
+          </div>
+
+          <!-- Товар 2 -->
+          <div class="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm flex flex-col justify-between">
+            <div class="w-full h-32 bg-gray-100 rounded-xl mb-2 flex items-center justify-center overflow-hidden">
+              <img src="https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_SL1500_.jpg" alt="iPhone 18 Pro" class="h-full object-contain" />
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="bg-[#34C759] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">43 000 ₸ 5%</span>
+                <span class="bg-amber-400 text-black text-[10px] font-bold px-1.5 py-0.5 rounded">0 • 0 • 24</span>
+              </div>
+              <p class="text-[16px] font-bold text-gray-900">860 000 ₸</p>
+              <p class="text-[11px] text-emerald-600 font-medium">817 000 ₸ с учетом Бонусов</p>
+              <p class="text-[12px] text-gray-500 line-clamp-1">Смартфон Apple iPhone 18 Pro</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Нижняя кнопка возврата -->
+    <footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-[#F2F2F7] z-50 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+      <button 
+        onclick="resetToForm()"
+        class="w-full py-3.5 bg-[#0055A5] active:bg-[#004485] text-white font-medium text-[16px] rounded-xl shadow-md transition-all text-center"
+      >
+        Вернуться в Переводы
+      </button>
+    </footer>
+
+  </div>
+
+
+  <!-- ================= 3. SCRIPTS ================= -->
   <script>
-    // Обновление текста на синей кнопке при вводе суммы
     function updateButton() {
       const amount = document.getElementById('amountInput').value;
       const btn = document.getElementById('submitBtn');
@@ -156,20 +271,17 @@
       }
     }
 
-    // Подсчет символов в сообщении
     function updateCharCount() {
       const msg = document.getElementById('messageInput').value;
       document.getElementById('charCounter').innerText = `${msg.length}/50`;
     }
 
-    // Клик по быстрой кнопке сообщения
     function setTag(text) {
       const input = document.getElementById('messageInput');
       input.value = text;
       updateCharCount();
     }
 
-    // Переключение вкладок
     function selectTab(tabName) {
       const phoneBtn = document.getElementById('tab-phone');
       const cardBtn = document.getElementById('tab-card');
@@ -188,16 +300,36 @@
       }
     }
 
-    function handleTransfer() {
-      const amount = document.getElementById('amountInput').value;
-      if (!amount || amount <= 0) {
-        alert('Введите сумму перевода');
-      } else {
-        alert(`Перевод на сумму ${amount} ₸ выполнен!`);
-      }
+    // Переход на экран успеха
+    function showSuccessScreen() {
+      const amount = document.getElementById('amountInput').value || '100';
+
+      // Вставляем введенную сумму
+      document.getElementById('successAmountText').innerText = `${amount} ₸`;
+
+      // Переключаем видимость экранов
+      document.getElementById('screen-form').classList.add('hidden');
+      document.getElementById('screen-success').classList.remove('hidden');
+      document.getElementById('screen-success').classList.add('flex');
+      
+      window.scrollTo(0, 0);
     }
 
-    // Service Worker для PWA
+    // Возврат на форму перевода
+    function resetToForm() {
+      document.getElementById('amountInput').value = '';
+      document.getElementById('messageInput').value = '';
+      updateButton();
+      updateCharCount();
+
+      document.getElementById('screen-success').classList.add('hidden');
+      document.getElementById('screen-success').classList.remove('flex');
+      document.getElementById('screen-form').classList.remove('hidden');
+
+      window.scrollTo(0, 0);
+    }
+
+    // PWA Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
