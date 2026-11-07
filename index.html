@@ -2,58 +2,201 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мое PWA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Платёжная система</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- PWA Manifest & iOS meta tags -->
+  <!-- PWA & iOS Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Приложение">
+  <meta name="apple-mobile-web-app-title" content="Платежи">
   <link rel="apple-touch-icon" href="icon-192.png">
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex flex-col justify-between items-center p-4">
+<body class="bg-slate-950 text-white min-h-screen flex flex-col font-sans antialiased select-none pb-24">
 
-  <!-- Шапка (Header) -->
-  <header class="w-full max-w-md pt-4 pb-2 border-b border-slate-800 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-indigo-400">My App</h1>
-    <span class="text-xs bg-indigo-950 text-indigo-300 px-2 py-1 rounded-full border border-indigo-800">iOS Ready</span>
-  </header>
+  <!-- Контейнер приложения с безопасными отступами под iOS -->
+  <div class="w-full max-w-md mx-auto px-4 pt-[env(safe-area-inset-top)] flex-1 flex flex-col">
 
-  <!-- Основной контент -->
-  <main class="w-full max-w-md bg-slate-800 rounded-2xl p-6 shadow-2xl border border-slate-700 text-center my-auto">
-    <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/30">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-      </svg>
-    </div>
-    <h2 class="text-2xl font-bold mb-2">Привет из PWA!</h2>
-    <p class="text-slate-400 text-sm mb-6">Это интерфейс твоего приложения на Tailwind CSS.</p>
+    <!-- 1. Верхняя шапка -->
+    <header class="py-4 flex justify-between items-center border-b border-slate-800">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-lg shadow-md shadow-indigo-600/30">
+          N
+        </div>
+        <div>
+          <p class="text-xs text-slate-400">Привет 👋</p>
+          <h1 class="text-sm font-semibold">Мой Кошелёк</h1>
+        </div>
+      </div>
+      <button class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 active:scale-95 transition">
+        🔔
+      </button>
+    </header>
 
-    <button onclick="alert('Всё работает!')" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold rounded-xl transition shadow-lg shadow-indigo-600/30">
-      Нажми меня
+    <!-- 2. Баланс и карта -->
+    <section class="mt-5 p-6 bg-gradient-to-tr from-indigo-900 via-indigo-700 to-slate-900 rounded-3xl shadow-2xl border border-indigo-500/20 relative overflow-hidden">
+      <!-- Декоративные круги на фоне -->
+      <div class="absolute -right-6 -top-6 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl"></div>
+      
+      <p class="text-xs font-medium text-indigo-200 uppercase tracking-wider mb-1">Основной баланс</p>
+      <h2 class="text-3xl font-extrabold tracking-tight mb-6" id="balanceText">$1,250.00</h2>
+
+      <div class="flex justify-between items-end text-xs text-indigo-200">
+        <div>
+          <p class="opacity-75">Номер карты</p>
+          <p class="font-mono text-sm tracking-widest text-white mt-0.5">•••• 4829</p>
+        </div>
+        <span class="font-bold tracking-widest text-base italic text-white">VISA</span>
+      </div>
+    </section>
+
+    <!-- 3. Быстрые действия -->
+    <section class="grid grid-cols-3 gap-3 mt-5">
+      <button onclick="switchTab('transfer')" class="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center gap-2 active:scale-95 transition hover:border-indigo-500/50">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-xl">
+          💸
+        </div>
+        <span class="text-xs font-medium">Перевести</span>
+      </button>
+
+      <button onclick="alert('Функция пополнения')" class="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center gap-2 active:scale-95 transition hover:border-indigo-500/50">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center text-xl">
+          ➕
+        </div>
+        <span class="text-xs font-medium">Пополнить</span>
+      </button>
+
+      <button onclick="alert('Открытие камеры QR')" class="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center gap-2 active:scale-95 transition hover:border-indigo-500/50">
+        <div class="w-10 h-10 rounded-xl bg-amber-600/20 text-amber-400 flex items-center justify-center text-xl">
+          📷
+        </div>
+        <span class="text-xs font-medium">QR код</span>
+      </button>
+    </section>
+
+    <!-- 4. Форма быстрых переводов -->
+    <section class="mt-6 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-lg">
+      <h3 class="text-sm font-semibold mb-4 text-slate-300">Быстрый перевод</h3>
+      
+      <!-- Поле ввода суммы -->
+      <div class="relative mb-4">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+        <input type="number" id="sendAmount" placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 pl-8 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition font-semibold text-lg" />
+      </div>
+
+      <!-- Кнопка отправить -->
+      <button onclick="makePayment()" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 font-semibold text-sm rounded-2xl transition shadow-lg shadow-indigo-600/30">
+        Отправить перевод
+      </button>
+    </section>
+
+    <!-- 5. История транзакций -->
+    <section class="mt-6 flex-1">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-sm font-semibold text-slate-300">Последние операции</h3>
+        <button class="text-xs text-indigo-400 font-medium">Все</button>
+      </div>
+
+      <div class="space-y-2.5" id="transactionList">
+        <!-- Транзакция 1 -->
+        <div class="p-3.5 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-lg">
+              ☕
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-white">Starbucks Coffee</p>
+              <p class="text-[10px] text-slate-500">Сегодня, 14:20</p>
+            </div>
+          </div>
+          <span class="text-xs font-bold text-red-400">-$4.50</span>
+        </div>
+
+        <!-- Транзакция 2 -->
+        <div class="p-3.5 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center text-lg">
+              💰
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-white">Перевод от Алекса</p>
+              <p class="text-[10px] text-slate-500">Вчера, 19:45</p>
+            </div>
+          </div>
+          <span class="text-xs font-bold text-emerald-400">+$150.00</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 6. Фиксированный нижний банер (TabBar) -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 px-6 py-3 flex justify-between items-center z-50 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+    <button class="flex flex-col items-center gap-1 text-indigo-400">
+      <span class="text-lg">💳</span>
+      <span class="text-[10px] font-medium">Платежи</span>
     </button>
-  </main>
-
-  <!-- Нижнее меню (TabBar) -->
-  <nav class="w-full max-w-md bg-slate-800/80 backdrop-blur-md rounded-2xl p-3 border border-slate-700 flex justify-around">
-    <button class="text-indigo-400 font-medium text-xs flex flex-col items-center">
-      <span>🏠</span> Главная
+    <button class="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300">
+      <span class="text-lg">📊</span>
+      <span class="text-[10px] font-medium">Аналитика</span>
     </button>
-    <button class="text-slate-400 font-medium text-xs flex flex-col items-center">
-      <span>⚙️</span> Настройки
+    <button class="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300">
+      <span class="text-lg">⚙️</span>
+      <span class="text-[10px] font-medium">Настройки</span>
     </button>
   </nav>
 
-  <!-- Регистрация Service Worker -->
+  <!-- Скрипт интерактивности (JS) -->
   <script>
+    let currentBalance = 1250.00;
+
+    function makePayment() {
+      const amountInput = document.getElementById('sendAmount');
+      const amount = parseFloat(amountInput.value);
+
+      if (!amount || amount <= 0) {
+        alert('Пожалуйста, введите корректную сумму');
+        return;
+      }
+
+      if (amount > currentBalance) {
+        alert('Недостаточно средств на балансе!');
+        return;
+      }
+
+      // Списываем баланс
+      currentBalance -= amount;
+      document.getElementById('balanceText').innerText = `$${currentBalance.toFixed(2)}`;
+
+      // Добавляем новую транзакцию в список
+      const list = document.getElementById('transactionList');
+      const newTransaction = document.createElement('div');
+      newTransaction.className = "p-3.5 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-between animate-fade-in";
+      newTransaction.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-950 text-indigo-400 flex items-center justify-center text-lg">
+            💸
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-white">Перевод средств</p>
+            <p class="text-[10px] text-slate-500">Только что</p>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-red-400">-$${amount.toFixed(2)}</span>
+      `;
+      list.prepend(newTransaction);
+
+      // Очищаем поле ввода
+      amountInput.value = '';
+      alert(`Перевод на $${amount.toFixed(2)} успешно выполнен!`);
+    }
+
+    // Регистрация Service Worker для PWA
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('Service Worker готов!'))
-        .catch((err) => console.log('Ошибка SW:', err));
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
   </script>
 </body>
