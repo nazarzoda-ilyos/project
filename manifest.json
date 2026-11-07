@@ -1,7 +1,7 @@
 {
   "name": "Мое Приложение",
   "short_name": "Приложение",
-  "start_url": "/",
+  "start_url": "/project/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
