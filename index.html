@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Платёжная система</title>
+  <title>Клиенту Kaspi</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,190 +11,193 @@
   <!-- PWA & iOS Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Платежи">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Переводы">
   <link rel="apple-touch-icon" href="icon-192.png">
+
+  <style>
+    /* Отключение выпадающих стрелок у input type=number */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-white min-h-screen flex flex-col font-sans antialiased select-none pb-24">
+<body class="bg-[#F2F2F7] text-black min-h-screen flex flex-col font-sans antialiased select-none">
 
-  <!-- Контейнер приложения с безопасными отступами под iOS -->
-  <div class="w-full max-w-md mx-auto px-4 pt-[env(safe-area-inset-top)] flex-1 flex flex-col">
-
-    <!-- 1. Верхняя шапка -->
-    <header class="py-4 flex justify-between items-center border-b border-slate-800">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-lg shadow-md shadow-indigo-600/30">
-          N
-        </div>
-        <div>
-          <p class="text-xs text-slate-400">Привет 👋</p>
-          <h1 class="text-sm font-semibold">Мой Кошелёк</h1>
-        </div>
-      </div>
-      <button class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 active:scale-95 transition">
-        🔔
+  <!-- Главный контейнер с отступами Safe Area -->
+  <div class="w-full max-w-md mx-auto flex-1 flex flex-col pt-[env(safe-area-inset-top)] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+    
+    <!-- 1. Шапка (Header) -->
+    <header class="px-4 py-3 flex items-center justify-between relative bg-[#F2F2F7]">
+      <button class="text-black font-normal text-2xl active:opacity-40">
+        &#8249;
       </button>
+      <h1 class="text-[17px] font-semibold text-center text-black">Клиенту Kaspi</h1>
+      <div class="w-6"></div> <!-- Пустой блок для центровки заголовка -->
     </header>
 
-    <!-- 2. Баланс и карта -->
-    <section class="mt-5 p-6 bg-gradient-to-tr from-indigo-900 via-indigo-700 to-slate-900 rounded-3xl shadow-2xl border border-indigo-500/20 relative overflow-hidden">
-      <!-- Декоративные круги на фоне -->
-      <div class="absolute -right-6 -top-6 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl"></div>
-      
-      <p class="text-xs font-medium text-indigo-200 uppercase tracking-wider mb-1">Основной баланс</p>
-      <h2 class="text-3xl font-extrabold tracking-tight mb-6" id="balanceText">$1,250.00</h2>
+    <main class="flex-1 px-4 pt-2 pb-24 space-y-3 overflow-y-auto">
 
-      <div class="flex justify-between items-end text-xs text-indigo-200">
-        <div>
-          <p class="opacity-75">Номер карты</p>
-          <p class="font-mono text-sm tracking-widest text-white mt-0.5">•••• 4829</p>
-        </div>
-        <span class="font-bold tracking-widest text-base italic text-white">VISA</span>
-      </div>
-    </section>
-
-    <!-- 3. Быстрые действия -->
-    <section class="grid grid-cols-3 gap-3 mt-5">
-      <button onclick="switchTab('transfer')" class="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center gap-2 active:scale-95 transition hover:border-indigo-500/50">
-        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-xl">
-          💸
-        </div>
-        <span class="text-xs font-medium">Перевести</span>
-      </button>
-
-      <button onclick="alert('Функция пополнения')" class="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center gap-2 active:scale-95 transition hover:border-indigo-500/50">
-        <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center text-xl">
-          ➕
-        </div>
-        <span class="text-xs font-medium">Пополнить</span>
-      </button>
-
-      <button onclick="alert('Открытие камеры QR')" class="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center gap-2 active:scale-95 transition hover:border-indigo-500/50">
-        <div class="w-10 h-10 rounded-xl bg-amber-600/20 text-amber-400 flex items-center justify-center text-xl">
-          📷
-        </div>
-        <span class="text-xs font-medium">QR код</span>
-      </button>
-    </section>
-
-    <!-- 4. Форма быстрых переводов -->
-    <section class="mt-6 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-lg">
-      <h3 class="text-sm font-semibold mb-4 text-slate-300">Быстрый перевод</h3>
-      
-      <!-- Поле ввода суммы -->
-      <div class="relative mb-4">
-        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-        <input type="number" id="sendAmount" placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 pl-8 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition font-semibold text-lg" />
-      </div>
-
-      <!-- Кнопка отправить -->
-      <button onclick="makePayment()" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 font-semibold text-sm rounded-2xl transition shadow-lg shadow-indigo-600/30">
-        Отправить перевод
-      </button>
-    </section>
-
-    <!-- 5. История транзакций -->
-    <section class="mt-6 flex-1">
-      <div class="flex justify-between items-center mb-3">
-        <h3 class="text-sm font-semibold text-slate-300">Последние операции</h3>
-        <button class="text-xs text-indigo-400 font-medium">Все</button>
-      </div>
-
-      <div class="space-y-2.5" id="transactionList">
-        <!-- Транзакция 1 -->
-        <div class="p-3.5 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-lg">
-              ☕
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-white">Starbucks Coffee</p>
-              <p class="text-[10px] text-slate-500">Сегодня, 14:20</p>
-            </div>
+      <!-- 2. Блок выбора карты Kaspi Gold -->
+      <div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm border border-gray-100">
+        <div class="flex items-center gap-3">
+          <!-- Иконка Kaspi Gold -->
+          <div class="w-10 h-10 rounded-lg bg-[#C49A45] flex items-center justify-center font-bold text-white text-xs shadow-inner">
+            KG
           </div>
-          <span class="text-xs font-bold text-red-400">-$4.50</span>
+          <span class="text-[16px] font-medium text-gray-900">Kaspi Gold</span>
         </div>
+        <span class="text-[16px] font-semibold text-gray-900">1,18 ₸</span>
+      </div>
 
-        <!-- Транзакция 2 -->
-        <div class="p-3.5 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center text-lg">
-              💰
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-white">Перевод от Алекса</p>
-              <p class="text-[10px] text-slate-500">Вчера, 19:45</p>
-            </div>
-          </div>
-          <span class="text-xs font-bold text-emerald-400">+$150.00</span>
+      <!-- Стрелка-разделитель -->
+      <div class="flex justify-center -my-1">
+        <div class="w-7 h-5 bg-[#E5E5EA] rounded-full flex items-center justify-center text-gray-500 text-xs">
+          &#8964;
         </div>
       </div>
-    </section>
+
+      <!-- 3. Табы переключения (Телефон / Карта / Kaspi QR) -->
+      <div class="bg-[#E5E5EA] p-1 rounded-xl flex text-[13px] font-medium text-gray-700">
+        <button id="tab-phone" onclick="selectTab('phone')" class="flex-1 py-1.5 rounded-lg bg-white text-black shadow-sm text-center">
+          Телефон
+        </button>
+        <button id="tab-card" onclick="selectTab('card')" class="flex-1 py-1.5 rounded-lg text-center text-gray-600">
+          Карта
+        </button>
+        <button id="tab-qr" onclick="selectTab('qr')" class="flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1 text-gray-600">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm0 5h3v3h-3v-3zm5 0h3v3h-3v-3z"/></svg>
+          Kaspi QR
+        </button>
+      </div>
+
+      <!-- 4. Поле ввода телефона -->
+      <div class="relative bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+        <input 
+          type="tel" 
+          id="phoneInput" 
+          placeholder="Телефон получателя" 
+          class="w-full text-[16px] text-gray-900 placeholder-gray-400 bg-transparent outline-none font-normal"
+        />
+        <!-- Иконка контактов (красный кружок с профилем) -->
+        <button class="w-7 h-7 rounded-full bg-[#E50000] text-white flex items-center justify-center flex-shrink-0 ml-2 active:opacity-70">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+            <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 5. Поле ввода суммы -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center">
+        <input 
+          type="number" 
+          id="amountInput" 
+          placeholder="0" 
+          oninput="updateButton()"
+          class="w-full text-[17px] text-gray-900 placeholder-gray-900 bg-transparent outline-none font-normal"
+        />
+        <span class="text-[17px] font-normal text-gray-900 ml-1">₸</span>
+      </div>
+
+      <!-- 6. Поле сообщения получателю -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col justify-between min-h-[100px]">
+        <textarea 
+          id="messageInput"
+          maxlength="50"
+          oninput="updateCharCount()"
+          placeholder="Сообщение получателю" 
+          class="w-full text-[15px] text-gray-900 placeholder-gray-400 bg-transparent outline-none resize-none font-normal h-14"
+        ></textarea>
+        <div class="text-right text-[12px] text-gray-400" id="charCounter">0/50</div>
+      </div>
+
+      <!-- 7. Быстрые теги (Рақмет!, За обед, Возвращаю :) ) -->
+      <div class="flex gap-2 overflow-x-auto pt-1 no-scrollbar">
+        <button onclick="setTag('Рақмет!')" class="px-3.5 py-1.5 bg-[#E5E5EA]/70 active:bg-[#E5E5EA] rounded-lg text-[13px] text-[#007AFF] font-medium whitespace-nowrap">
+          Рақмет!
+        </button>
+        <button onclick="setTag('За обед')" class="px-3.5 py-1.5 bg-[#E5E5EA]/70 active:bg-[#E5E5EA] rounded-lg text-[13px] text-[#007AFF] font-medium whitespace-nowrap">
+          За обед
+        </button>
+        <button onclick="setTag('Возвращаю :)')" class="px-3.5 py-1.5 bg-[#E5E5EA]/70 active:bg-[#E5E5EA] rounded-lg text-[13px] text-[#007AFF] font-medium whitespace-nowrap">
+          Возвращаю :)
+        </button>
+      </div>
+
+    </main>
+
+    <!-- 8. Нижняя синяя кнопка перевода -->
+    <footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-[#F2F2F7] z-50 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+      <button 
+        id="submitBtn"
+        onclick="handleTransfer()"
+        class="w-full py-3.5 bg-[#0055A5] active:bg-[#004485] text-white font-medium text-[16px] rounded-xl shadow-md transition-all text-center"
+      >
+        Перевести 0 ₸
+      </button>
+    </footer>
 
   </div>
 
-  <!-- 6. Фиксированный нижний банер (TabBar) -->
-  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 px-6 py-3 flex justify-between items-center z-50 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-    <button class="flex flex-col items-center gap-1 text-indigo-400">
-      <span class="text-lg">💳</span>
-      <span class="text-[10px] font-medium">Платежи</span>
-    </button>
-    <button class="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300">
-      <span class="text-lg">📊</span>
-      <span class="text-[10px] font-medium">Аналитика</span>
-    </button>
-    <button class="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300">
-      <span class="text-lg">⚙️</span>
-      <span class="text-[10px] font-medium">Настройки</span>
-    </button>
-  </nav>
-
-  <!-- Скрипт интерактивности (JS) -->
   <script>
-    let currentBalance = 1250.00;
-
-    function makePayment() {
-      const amountInput = document.getElementById('sendAmount');
-      const amount = parseFloat(amountInput.value);
-
-      if (!amount || amount <= 0) {
-        alert('Пожалуйста, введите корректную сумму');
-        return;
+    // Обновление текста на синей кнопке при вводе суммы
+    function updateButton() {
+      const amount = document.getElementById('amountInput').value;
+      const btn = document.getElementById('submitBtn');
+      if (amount && amount > 0) {
+        btn.innerText = `Перевести ${amount} ₸`;
+      } else {
+        btn.innerText = 'Перевести 0 ₸';
       }
-
-      if (amount > currentBalance) {
-        alert('Недостаточно средств на балансе!');
-        return;
-      }
-
-      // Списываем баланс
-      currentBalance -= amount;
-      document.getElementById('balanceText').innerText = `$${currentBalance.toFixed(2)}`;
-
-      // Добавляем новую транзакцию в список
-      const list = document.getElementById('transactionList');
-      const newTransaction = document.createElement('div');
-      newTransaction.className = "p-3.5 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-between animate-fade-in";
-      newTransaction.innerHTML = `
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-950 text-indigo-400 flex items-center justify-center text-lg">
-            💸
-          </div>
-          <div>
-            <p class="text-xs font-semibold text-white">Перевод средств</p>
-            <p class="text-[10px] text-slate-500">Только что</p>
-          </div>
-        </div>
-        <span class="text-xs font-bold text-red-400">-$${amount.toFixed(2)}</span>
-      `;
-      list.prepend(newTransaction);
-
-      // Очищаем поле ввода
-      amountInput.value = '';
-      alert(`Перевод на $${amount.toFixed(2)} успешно выполнен!`);
     }
 
-    // Регистрация Service Worker для PWA
+    // Подсчет символов в сообщении
+    function updateCharCount() {
+      const msg = document.getElementById('messageInput').value;
+      document.getElementById('charCounter').innerText = `${msg.length}/50`;
+    }
+
+    // Клик по быстрой кнопке сообщения
+    function setTag(text) {
+      const input = document.getElementById('messageInput');
+      input.value = text;
+      updateCharCount();
+    }
+
+    // Переключение вкладок
+    function selectTab(tabName) {
+      const phoneBtn = document.getElementById('tab-phone');
+      const cardBtn = document.getElementById('tab-card');
+      const qrBtn = document.getElementById('tab-qr');
+
+      [phoneBtn, cardBtn, qrBtn].forEach(btn => {
+        btn.className = "flex-1 py-1.5 rounded-lg text-center text-gray-600 flex items-center justify-center gap-1";
+      });
+
+      if (tabName === 'phone') {
+        phoneBtn.className = "flex-1 py-1.5 rounded-lg bg-white text-black shadow-sm text-center font-medium";
+      } else if (tabName === 'card') {
+        cardBtn.className = "flex-1 py-1.5 rounded-lg bg-white text-black shadow-sm text-center font-medium";
+      } else if (tabName === 'qr') {
+        qrBtn.className = "flex-1 py-1.5 rounded-lg bg-white text-black shadow-sm text-center font-medium flex items-center justify-center gap-1";
+      }
+    }
+
+    function handleTransfer() {
+      const amount = document.getElementById('amountInput').value;
+      if (!amount || amount <= 0) {
+        alert('Введите сумму перевода');
+      } else {
+        alert(`Перевод на сумму ${amount} ₸ выполнен!`);
+      }
+    }
+
+    // Service Worker для PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
