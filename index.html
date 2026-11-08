@@ -41,12 +41,42 @@
 
 <body class="bg-[#F2F2F7] text-black min-h-screen flex flex-col font-sans antialiased select-none">
 
+    <!-- ================= 0. ЭКРАН ВВОДА ИМЕНИ ПОЛУЧАТЕЛЯ (ПЕРВЫЙ ЭКРАН) ================= -->
+    <div id="screen-login"
+        class="w-full max-w-md mx-auto flex-1 flex flex-col justify-center px-6 pt-[env(safe-area-inset-top)] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 space-y-5">
+            <div class="text-center space-y-2">
+                <div
+                    class="w-16 h-16 bg-[#E50000] rounded-2xl mx-auto flex items-center justify-center text-white text-3xl font-bold shadow-md">
+                    K
+                </div>
+                <h1 class="text-[20px] font-bold text-gray-900">Добро пожаловать в Kaspi</h1>
+                <p class="text-[14px] text-gray-500">Введите имя и фамилию получателя для чека</p>
+            </div>
+
+            <!-- Поле ввода имени получателя -->
+            <div class="space-y-1">
+                <label class="text-[12px] font-semibold text-gray-500 uppercase tracking-wider">Имя и фамилия
+                    получателя</label>
+                <input type="text" id="senderNameInput" placeholder="Например: Жарылқасын С."
+                    class="w-full bg-[#F2F2F7] border border-gray-200 rounded-2xl p-4 text-[16px] text-gray-900 outline-none focus:border-[#E50000] transition" />
+            </div>
+
+            <!-- Кнопка продолжить -->
+            <button onclick="saveNameAndStart()"
+                class="w-full py-4 bg-[#E50000] active:bg-[#cc0000] text-white font-semibold text-[16px] rounded-2xl shadow-md transition-all text-center">
+                Продолжить
+            </button>
+        </div>
+    </div>
+
+
     <!-- ================= 1. ЭКРАН ВВОДА ПЕРЕВОДА ================= -->
     <div id="screen-form"
-        class="w-full max-w-md mx-auto flex-1 flex flex-col pt-[env(safe-area-inset-top)] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        class="hidden w-full max-w-md mx-auto flex-1 flex-col pt-[env(safe-area-inset-top)] pb-[calc(1rem+env(safe-area-inset-bottom))]">
 
         <header class="px-4 py-3 flex items-center justify-between relative bg-[#F2F2F7]">
-            <button class="text-black font-normal text-2xl active:opacity-40">&#8249;</button>
+            <button onclick="goToLogin()" class="text-black font-normal text-2xl active:opacity-40">&#8249;</button>
             <h1 class="text-[17px] font-semibold text-center text-black">Клиенту Kaspi</h1>
             <div class="w-6"></div>
         </header>
@@ -80,7 +110,7 @@
                 <input type="tel" id="phoneInput" placeholder="Телефон получателя"
                     class="w-full text-[16px] text-gray-900 placeholder-gray-400 bg-transparent outline-none font-normal" />
                 <button
-                    class="w-7 h-7 rounded-full bg-[#E50000] text-white flex items-center justify-center flex-shrink-0 ml-2 active:opacity-70">
+                    class="w-7 h-7 rounded-full bg-white border-2 border-[#E50000] text-[#E50000] flex items-center justify-center flex-shrink-0 ml-2 active:opacity-70">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                         <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
                     </svg>
@@ -136,7 +166,6 @@
             <div class="flex flex-col items-center justify-center py-2">
                 <div
                     class="w-14 h-14 rounded-full bg-[#1b8733] flex items-center justify-center text-white mb-3 shadow-sm">
-                    <!-- СЮДА МОЖНО ПОСТАВИТЬ СВОЮ ИКОНКУ ГАЛОЧКИ (сейчас тут стандартный SVG) -->
                     <svg class="w-8 h-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="3">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -151,16 +180,13 @@
                 <!-- Квитанция -->
                 <button class="w-full p-4 flex items-center justify-between text-left active:bg-gray-50 rounded-t-2xl">
                     <div class="flex items-center gap-3">
-                        <!-- СЮДА ПОСТАВЬ СВОЮ ИКОНКУ КВИТАНЦИИ (вместо этого блока можно вставить <img src="...">) -->
                         <div
                             class="w-8 h-8 rounded-lg bg-red-50 text-[#E50000] flex items-center justify-center text-xs font-bold border border-red-100">
                             <div class="w-9 h-9 rounded-xl bg-[#FFF5F5] flex items-center justify-center flex-shrink-0">
                                 <svg class="w-5 h-5 text-[#E50000]" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <!-- Контур документа со скругленными углами -->
                                     <rect x="4" y="2" width="16" height="20" rx="3" />
-                                    <!-- Линии внутри квитанции -->
                                     <line x1="8" y1="7" x2="16" y2="7" />
                                     <line x1="8" y1="12" x2="16" y2="12" />
                                     <line x1="8" y1="17" x2="12" y2="17" />
@@ -175,20 +201,18 @@
                     <span class="text-gray-400 text-lg">&#8250;</span>
                 </button>
 
-                <!-- Сохранить в частые -->
+                <!-- Сохранить в частые (Здесь автоматически появится имя получателя из первого экрана) -->
                 <div class="p-4 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <!-- СЮДА ПОСТАВЬ СВОЮ ЗВЁЗДОЧКУ (вместо этого блока можно вставить <img src="...">) -->
                         <div class="w-9 h-9 flex items-center justify-center flex-shrink-0">
                             <svg class="w-6 h-6 text-[#E50000]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <!-- Контур пятиконечной звезды -->
                                 <polygon
                                     points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                             </svg>
                         </div>
                         <div>
-                            <p class="text-[15px] font-normal text-black-400">Жарылқасын С.</p>
+                            <p class="text-[15px] font-normal text-gray-900" id="recipientNameDisplay">Жарылқасын С.</p>
                             <p class="text-[12px] text-gray-400">Сохранить в Частые</p>
                         </div>
                     </div>
@@ -201,20 +225,18 @@
                 </div>
             </div>
 
-            <!-- Блок: Вас могут заинтересовать (увеличенные карточки вплотную друг к другу) -->
+            <!-- Блок: Вас могут заинтересовать -->
             <div class="pt-2">
                 <h3 class="text-[15px] font-semibold text-gray-900 mb-3">Вас могут заинтересовать</h3>
 
-                <!-- Уменьшили отступ между колонками до gap-1.5, чтобы карточки были ближе друг к другу -->
                 <div class="grid grid-cols-2 gap-1.5">
-
                     <!-- Товар 1 -->
                     <div
                         class="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm flex flex-col justify-between">
                         <div
                             class="w-full h-36 bg-gray-50 rounded-xl mb-2 flex items-center justify-center overflow-hidden">
-                            <img src="https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_SL1500_.jpg"
-                                alt="iPhone 14" class="h-full w-full object-contain scale-105" />
+                            <img src="https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_SL1500_.jpg" alt="iPhone 14"
+                                class="h-full w-full object-contain scale-105" />
                         </div>
                         <div class="space-y-1">
                             <div class="flex items-center gap-1 flex-wrap">
@@ -234,8 +256,8 @@
                         class="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm flex flex-col justify-between">
                         <div
                             class="w-full h-36 bg-gray-50 rounded-xl mb-2 flex items-center justify-center overflow-hidden">
-                            <img src="https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_SL1500_.jpg"
-                                alt="iPhone 14" class="h-full w-full object-contain scale-105" />
+                            <img src="https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_SL1500_.jpg" alt="iPhone 14"
+                                class="h-full w-full object-contain scale-105" />
                         </div>
                         <div class="space-y-1">
                             <div class="flex items-center gap-1 flex-wrap">
@@ -249,7 +271,6 @@
                             <p class="text-[12px] text-gray-500 line-clamp-1">Смартфон Apple iPhone 14</p>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -266,6 +287,32 @@
 
     <!-- ================= 3. SCRIPTS ================= -->
     <script>
+        let globalRecipientName = "Жарылқасын С.";
+
+        function saveNameAndStart() {
+            const input = document.getElementById('senderNameInput');
+            if (input.value.trim() !== "") {
+                globalRecipientName = input.value.trim();
+            }
+
+            // Передаем введенное имя сразу на чек в поле получателя под звездочку
+            document.getElementById('recipientNameDisplay').innerText = globalRecipientName;
+
+            // Переключаем экраны
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-form').classList.remove('hidden');
+            document.getElementById('screen-form').classList.add('flex');
+            window.scrollTo(0, 0);
+        }
+
+        function goToLogin() {
+            document.getElementById('screen-form').classList.add('hidden');
+            document.getElementById('screen-form').classList.remove('flex');
+            document.getElementById('screen-success').classList.add('hidden');
+            document.getElementById('screen-success').classList.remove('flex');
+            document.getElementById('screen-login').classList.remove('hidden');
+        }
+
         function updateButton() {
             const amount = document.getElementById('amountInput').value;
             const btn = document.getElementById('submitBtn');
@@ -309,6 +356,9 @@
             const amount = document.getElementById('amountInput').value || '100';
             document.getElementById('successAmountText').innerText = `${amount} ₸`;
 
+            // Гарантируем, что на чеке под звездочкой стоит именно то имя, которое ввели в самом начале
+            document.getElementById('recipientNameDisplay').innerText = globalRecipientName;
+
             document.getElementById('screen-form').classList.add('hidden');
             document.getElementById('screen-success').classList.remove('hidden');
             document.getElementById('screen-success').classList.add('flex');
@@ -318,12 +368,14 @@
         function resetToForm() {
             document.getElementById('amountInput').value = '';
             document.getElementById('messageInput').value = '';
+            document.getElementById('phoneInput').value = '';
             updateButton();
             updateCharCount();
 
             document.getElementById('screen-success').classList.add('hidden');
             document.getElementById('screen-success').classList.remove('flex');
             document.getElementById('screen-form').classList.remove('hidden');
+            document.getElementById('screen-form').classList.add('flex');
             window.scrollTo(0, 0);
         }
 
